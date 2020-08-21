@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <style>
+        .video {
+            transform: rotateY(180deg);
+            -webkit-transform: rotateY(180deg);
+            -moz-transform: rotateY(180deg);
+        }
+    </style>
+    <title>WebCam</title>
+</head>
+
+<body>
+    <video class="video" autoplay></video>
+    <device type="media" onchange="update(this.data)"></device>
+
+    <!-- <video autoplay></video> -->
+    <script>
+        const hdConstraints = {
+            video: {
+                width: {
+                    min: window.innerWidth,
+                    max: window.innerWidth
+                },
+                height: {
+                    min: window.innerHeight,
+                    max: window.innerHeight
+                }
+            }
+        };
+
+        navigator.mediaDevices.getUserMedia(hdConstraints).
+        then((stream) => {
+            video.srcObject = stream
+        });
+
+
+        const vgaConstraints = {
+            video: {
+                width: {
+                    exact: 640
+                },
+                height: {
+                    exact: 480
+                }
+            }
+        };
+
+        navigator.mediaDevices.getUserMedia(vgaConstraints).
+        then((stream) => {
+            video.srcObject = stream
+        });
+        const constraints = {
+            video: true
+        };
+
+        const video = document.querySelector('video');
+
+        navigator.mediaDevices.getUserMedia(constraints).
+        then((stream) => {
+            video.srcObject = stream
+        });
+
+        function update(stream) {
+            document.querySelector('video').src = stream.url;
+        }
+
+        function hasGetUserMedia() {
+            return !!(navigator.mediaDevices &&
+                navigator.mediaDevices.getUserMedia);
+        }
+
+        if (hasGetUserMedia()) {
+            // Good to go!
+        } else {
+            alert('getUserMedia() is not supported by your browser');
+        }
+    </script>
+
+</body>
+
+</html>
